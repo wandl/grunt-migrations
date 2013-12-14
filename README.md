@@ -1,6 +1,6 @@
 # Grunt Database Migrations
 
-> push/pull databases from one location to another using Grunt. Inspired by https://github.com/getdave/grunt-деплоыментс. At first planned as fork, but later I understand what I want something more than push/pull only mysql databases.
+> push/pull databases from one location to another using Grunt. Inspired by https://github.com/getdave/grunt-deployments. At first planned as fork, but later I understand what I want something more than push/pull only mysql databases.
 
 **IMPORTANT NOTE**: the authors of this Plugin assume **no responsibility** for any actions which result from the usage of this script. You use it entirely *at your own risk*. It is *strongly* recommended that you test the script in a non-critical environment prior to rolling out for production use. *Always* manually backup your local and remote databases before using the script for the first time. No support can be provided for critical situations.
 
