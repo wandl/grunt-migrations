@@ -26,70 +26,73 @@ _Run this task with the `grunt migrations[:sub-task]` command._
 
 ### Options
 
-#### backups
+#### `backups`
 Type: `String` - path to "backups" folder, relative to grunt task target folder for local environment or relative to your "user home" for remote environments. Also, it can be absolute system path. 
 
-#### environments
+#### `environments`
 Type: `Object` - environments settings
 
-#### environments.local
+#### `environments.local`
 Type: **`REQUIRED`**:`Object` - settings of local environment (means environment, where grunt runs)
 
-#### environments.<environment_name>
+#### `environments.<environment_name>`
 Type: `Object` - environment meta name, e.g. `local`, `dev`, `stage`, `prod` etc.
 
-#### environments.<environment_name>.title
+#### `environments.<environment_name>.title`
 Type: `String` - environment title, e.g. `localhost`, `development`, `staging`, `production` etc. Will be used as folder name for databse backups folder for specific environment, e.g. `~/db_backup/<title>/<database_backup>.sql`
 
-#### environments.<environment_name>.db
+#### `environments.<environment_name>.db`
 Type: `Object` - database settings
 
-#### environments.<environment_name>.db.host
+#### `environments.<environment_name>.db.host`
 Type: `String` - database host, e.g. `localhost`, `0.0.0.0` etc.
 
-#### environments.<environment_name>.db.name
+#### `environments.<environment_name>.db.name`
 Type: `String` - database name
 
-#### environments.<environment_name>.db.user
+#### `environments.<environment_name>.db.user`
 Type: `String` - database username
 
-#### environments.<environment_name>.db.pass
+#### `environments.<environment_name>.db.pass`
 Type: `String` - database password
 
-#### environments.<environment_name>.db.type
+#### `environments.<environment_name>.db.type`
 Type: `String` - database type `mysql`, `postgree`, `mongo` etc. 
 
 ***IMPORTANT NOTE***: **currently support only `mysql`**
 
-#### environments.<environment_name>.ssh
+#### `environments.<environment_name>.ssh`
 Type: `Object` - ssh settings
 
-#### environments.<environment_name>.ssh.host
+#### `environments.<environment_name>.ssh.host`
 Type: `String` - shh host
 
-#### environments.<environment_name>.ssh.pass
+#### `environments.<environment_name>.ssh.port`
+Type: **`OPTIONAL`**:`String` - shh port
+
+#### `environments.<environment_name>.ssh.pass`
 Type: `String` - ssh username
 
 ### Sub-tasks
 
-#### <sub-task_name>
+#### `<sub-task_name>`
 Type: `Object` - sub-task config
 
-#### <sub-task_name>.action
+#### `<sub-task_name>.action`
 Type: `String:[push|pull]` - push/pull `source` database, where `source` is config option described below. `pull` - backup database, `push` - apply backup from `source` to `target`
 
-#### <sub-task_name>.source
+#### `<sub-task_name>.source`
 Type: `String` - `source` environment name from options `migrations.environments.<environment_name>`
 
-#### <sub-task_name>.target
+#### `<sub-task_name>.target`
 Type: `String` - `target` environment name from options `migrations.environments.<environment_name>`
 
 ### Usage Example
 
-```json
+```js
 migrations: {
   options: {
-    backups: 'db_backups',
+    backups: 'db_backup',
     environments: {
       local: {
         title: 'localhost',
@@ -122,6 +125,24 @@ migrations: {
   'push-dev-to-local': { action: 'push', source: 'dev', target: 'local' },
   'push-local-to-dev': { action: 'push', source: 'local', target: 'dev' }
 }
+```
+
+and run tasks from bash:
+
+```
+> grunt migrations:pull-dev
+
+> Running "migrations:pull-dev" (migrations) task
+>> grunt-migrations: execute command START 'ssh -p 22 <dev_ssh_username>@<dev_environment_host_or_IP> \ mkdir -p db_backup/development'
+>> grunt-migrations: execute command SUCCESS 'ssh -p 22 <dev_ssh_username>@<dev_environment_host_or_IP> \ mkdir -p db_backup/development
+>> grunt-migrations: execute command START 'ssh -p 22 <dev_ssh_username>@<dev_environment_host_or_IP> \ mysqldump -h localhost -u<dev_db_user> -p<dev_db_pass> <dev_db_name> --result-file=db_backup/development/2013-12-18_20-27-56.sql'
+>> grunt-migrations: execute command SUCCESS 'ssh -p 22 <dev_ssh_username>@<dev_environment_host_or_IP> \ mysqldump -h localhost -u<dev_db_user> -p<dev_db_pass> <dev_db_name> --result-file=db_backup/development/2013-12-18_20-27-56.sql'
+>> grunt-migrations: execute command START 'mkdir -p db_backup/development'
+>> grunt-migrations: execute command SUCCESS 'mkdir -p db_backup/development'
+>> grunt-migrations: execute command START 'scp -P 22 <dev_ssh_username>@<dev_environment_host_or_IP>:db_backup/development/2013-12-18_20-27-56.sql db_backup/development/2013-12-18_20-27-56.sql'
+>> grunt-migrations: execute command SUCCESS 'scp -P 22 <dev_ssh_username>@<dev_environment_host_or_IP>:db_backup/development/2013-12-18_20-27-56.sql db_backup/development/2013-12-18_20-27-56.sql'
+
+Done, without errors.
 ```
 
 ## Release History
