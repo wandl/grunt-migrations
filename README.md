@@ -147,4 +147,5 @@ Done, without errors.
 
 ## Release History
 
+ * 2013-12-21   v0.1.0   Added DOC
  * 2013-12-15   v0.0.1   Initial release
