@@ -37,8 +37,8 @@ module.exports = function(grunt) {
         ls: "ls -la"
       },
       mysql: {
-        pull: "mysqldump -h <%= host %> -u<%= user %> -p<%= pass %> <%= name %> --result-file=<%= backupPath %>/<%= backupName %>",
-        push: "mysql -h <%= host %> -u <%= user %> -p<%= pass %> <%= name %> < <%= backupPath %>/<%= backupName %>"
+        pull: "mysqldump -h <%= host %> -u<%= user %> -p'<%= pass %>' <%= name %> --result-file=<%= backupPath %>/<%= backupName %>",
+        push: "mysql -h <%= host %> -u <%= user %> -p'<%= pass %>' <%= name %> < <%= backupPath %>/<%= backupName %>"
       }
     },
     defaults: {
