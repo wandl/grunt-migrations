@@ -39,7 +39,8 @@ module.exports = function(grunt) {
       mysql: {
         pull: "mysqldump -h <%= host %> -u<%= user %> -p'<%= pass %>' <%= name %> --result-file=<%= backupPath %>/<%= backupName %>",
         push: "mysql -h <%= host %> -u <%= user %> -p'<%= pass %>' <%= name %> < <%= backupPath %>/<%= backupName %>"
-      }
+      },
+      search_replace: "sed -i '' 's#<%= search %>#<%= replace %>#g' <%= file %>"
     },
     defaults: {
       backups: 'db_backups',
@@ -137,6 +138,8 @@ module.exports = function(grunt) {
         // create backups folder on local
         commandsQueue.push(createCommand(config.cmd.bash.mkdir, { path: backupPath }));
 
+        // TODO search and replace
+
         // copy database backup from remote to local
         commandsQueue.push(createCommand(config.cmd.bash.scp, {
           options: '-P ' + sourceEnvConfig.ssh.port,
@@ -183,6 +186,14 @@ module.exports = function(grunt) {
         backupPath: backupPath,
         backupName: backupName
       }), sourceEnvConfig.ssh));
+
+      // Search and Replace database refs
+      commandsQueue.push(_.template(config.cmd.search_replace, {
+          search: sourceEnvConfig.url,
+          replace: targetEnvConfig.url,
+          file: [backupPath, backupName].join('/')
+        }
+      ));
 
       // copy source backup to local if source is remote environment
       if (sourceEnvConfig.ssh) {
