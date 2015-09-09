@@ -188,12 +188,12 @@ module.exports = function(grunt) {
       }), sourceEnvConfig.ssh));
 
       // Search and Replace database refs
-      commandsQueue.push(_.template(config.cmd.search_replace, {
+     /* commandsQueue.push(_.template(config.cmd.search_replace, {
           search: sourceEnvConfig.url,
           replace: targetEnvConfig.url,
           file: [backupPath, backupName].join('/')
         }
-      ));
+      ));*/
 
       // copy source backup to local if source is remote environment
       if (sourceEnvConfig.ssh) {
@@ -210,6 +210,14 @@ module.exports = function(grunt) {
           target: [backupPath, backupName].join('/')
         }));
       }
+
+      // Search and Replace database refs
+      commandsQueue.push(_.template(config.cmd.search_replace, {
+          search: sourceEnvConfig.url,
+          replace: targetEnvConfig.url,
+          file: [backupPath, backupName].join('/')
+        }
+      ));
 
       // copy source backup from local to target
       if (targetEnvConfig.ssh) {
