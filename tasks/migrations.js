@@ -40,7 +40,7 @@ module.exports = function(grunt) {
         pull: "mysqldump -h <%= host %> -u<%= user %> -p'<%= pass %>' <%= name %> --result-file=<%= backupPath %>/<%= backupName %>",
         push: "mysql -h <%= host %> -u <%= user %> -p'<%= pass %>' <%= name %> < <%= backupPath %>/<%= backupName %>"
       },
-      search_replace: "sed -i '' 's#<%= search %>#<%= replace %>#g' <%= file %>"
+      search_replace: "sed -i'' -e 's#<%= search %>#<%= replace %>#g' <%= file %>"
     },
     defaults: {
       backups: 'db_backups',
